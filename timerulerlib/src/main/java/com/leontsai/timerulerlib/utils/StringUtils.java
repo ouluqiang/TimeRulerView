@@ -1,4 +1,4 @@
-package com.leontsai.timerulerview;
+package com.leontsai.timerulerlib.utils;
 
 import android.content.Context;
 

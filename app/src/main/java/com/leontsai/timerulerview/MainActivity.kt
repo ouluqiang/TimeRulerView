@@ -6,6 +6,7 @@ import android.util.Log
 import com.leo.JsonString
 import com.leontsai.timerulerlib.TimeRulerView
 import com.leontsai.timerulerlib.bean.TimeInfo
+import com.leontsai.timerulerlib.utils.StringUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate

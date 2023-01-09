@@ -1,12 +1,12 @@
 package com.leo
 
-import com.leontsai.timerulerview.StringUtils
 
 
 import android.content.Context
 import android.util.ArrayMap
 import android.util.Log
 import androidx.lifecycle.Transformations.map
+import com.leontsai.timerulerlib.utils.StringUtils
 import java.math.BigDecimal
 import kotlin.math.log
 import kotlin.text.Typography.times

@@ -10,13 +10,16 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.text.TextPaint
+import android.util.Log
 import androidx.annotation.NonNull
 import com.blankj.utilcode.util.ConvertUtils
+import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.Utils
 import com.leontsai.timerulerlib.bean.ScaleInfo
 import com.leontsai.timerulerlib.bean.TimeInfo
 import com.leontsai.timerulerlib.callback.OnActionListener
 import com.leontsai.timerulerlib.callback.OnTouchListener
+import com.leontsai.timerulerlib.utils.StringUtils
 import java.util.*
 
 
@@ -27,7 +30,9 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
     /**
      * 24小时所分的总格数
      */
-    private var mTotalCellNum = 48
+    private var mTotalCellNum = 144
+    private var num = 144
+    private var lattice = 6
     /**
      * 文字的字体大小
      */
@@ -203,13 +208,17 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
         val setTime = Calendar.getInstance()
         for (i in 0..mTotalCellNum) {
             setTime.set(
-                year, month, day, if (mTotalCellNum == 48) {
-                    i / 2
-                } else i, if (mTotalCellNum == 48) {
-                    if (i % 2 == 0) 0 else 30
+                year, month, day, if (mTotalCellNum == num) {
+                    i / lattice
+                } else i,
+                if (mTotalCellNum == num) {
+                    if (i % lattice == 0) 0 else {
+                        (i % lattice)*10
+                    }
                 } else 0, 0
             )
             val scaleInfo = ScaleInfo()
+//            Log.d("a","${StringUtils.calendarString(setTime)}")
             scaleInfo.time = setTime.timeInMillis
             scaleInfo.text = i
             scaleList.add(scaleInfo)
@@ -217,7 +226,7 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
     }
 
     private fun initDefaultValue(@NonNull typedArray: TypedArray) {
-        mTotalCellNum = typedArray.getInt(R.styleable.TimeRulerView_totalTimePerCell, 48)
+        mTotalCellNum = typedArray.getInt(R.styleable.TimeRulerView_totalTimePerCell, num)
         mTextFontSize =
                 typedArray.getDimension(R.styleable.TimeRulerView_textFontSize, ConvertUtils.sp2px(13f).toFloat())
         mTextColor = typedArray.getColor(R.styleable.TimeRulerView_textColor, Color.rgb(0, 0, 0))
@@ -246,7 +255,7 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
             ConvertUtils.dp2px(3f).toFloat()
         )
         mWidthPerCell =
-                typedArray.getDimension(R.styleable.TimeRulerView_widthPerCell, ConvertUtils.dp2px(50f).toFloat())
+                typedArray.getDimension(R.styleable.TimeRulerView_widthPerCell, ConvertUtils.dp2px(20f).toFloat())
 
         mMillisecondPerPixel = mMillisecondPerCell / mWidthPerCell
 
@@ -411,12 +420,12 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
         val bottom = fontMetrics.bottom//为基线到字体下边框的距离,即上图中的bottom
         val baseLineY = measuredHeight / 2 - top / 2 - bottom / 2//基线中间点的y轴计算公式
 
-        if (mTotalCellNum == 48) {
-            if (i % 2 == 0) {
-                if (i < 20) {
-                    canvas.drawText("0" + (i / 2).toString() + ":00", moveX, baseLineY, mTextPaint)
+        if (mTotalCellNum == num) {
+            if (i % lattice == 0) {
+                if (i < lattice*10) {
+                    canvas.drawText("0" + (i / lattice).toString() + ":00", moveX, baseLineY, mTextPaint)
                 } else {
-                    canvas.drawText((i / 2).toString() + ":00", moveX, baseLineY, mTextPaint)
+                    canvas.drawText((i / lattice).toString() + ":00", moveX, baseLineY, mTextPaint)
                 }
             }
         } else if (mTotalCellNum == 24) {
