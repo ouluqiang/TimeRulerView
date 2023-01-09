@@ -258,7 +258,7 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
                 typedArray.getDimension(R.styleable.TimeRulerView_widthPerCell, ConvertUtils.dp2px(20f).toFloat())
 
         mMillisecondPerPixel = mMillisecondPerCell / mWidthPerCell
-
+        totalPixelPerDay = mTotalCellNum * mWidthPerCell
     }
 
     private fun initPaint() {
@@ -440,11 +440,30 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
     override fun onMove(distanceX: Float) {
         mMoveDistance += distanceX
         mCalendar.timeInMillis = initMillisecond - (mMoveDistance * mMillisecondPerPixel).toLong()
-
-        if (onSelectTimeListener != null) {
-            val time = mCalendar.timeInMillis
-            onSelectTimeListener!!.onSelectTime(time)
+//        Log.i("Move", "onScroll-:$mMoveDistance     ${totalPixelPerDay/2}")
+        var start=scaleList.get(0).time
+        var end=scaleList.get(scaleList.size-1).time
+        if (mCalendar.timeInMillis<start){
+            mMoveDistance= totalPixelPerDay/2
+            if (onSelectTimeListener != null) {
+                mCalendar.timeInMillis=start
+                val time = mCalendar.timeInMillis
+                onSelectTimeListener!!.onSelectTime(time)
+            }
+        }else if (mCalendar.timeInMillis>end){
+            mMoveDistance= -(totalPixelPerDay/2)
+            if (onSelectTimeListener != null) {
+                mCalendar.timeInMillis=end
+                val time = mCalendar.timeInMillis
+                onSelectTimeListener!!.onSelectTime(time)
+            }
+        }else{
+            if (onSelectTimeListener != null) {
+                val time = mCalendar.timeInMillis
+                onSelectTimeListener!!.onSelectTime(time)
+            }
         }
+
 
         invalidate()
     }
