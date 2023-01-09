@@ -144,6 +144,7 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
             field = value
             mCalendar.timeInMillis = field
             initMillisecond = mCalendar.timeInMillis
+            initData()
             invalidate()
         }
     /**
@@ -198,7 +199,7 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
         val day = mCalendar.get(Calendar.DAY_OF_MONTH)
         mCalendar.set(year, month, day, 12, 0, 0)
         initMillisecond = mCalendar.timeInMillis
-
+        scaleList.clear()
         val setTime = Calendar.getInstance()
         for (i in 0..mTotalCellNum) {
             setTime.set(
