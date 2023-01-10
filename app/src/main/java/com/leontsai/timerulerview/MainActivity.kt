@@ -1,17 +1,17 @@
 package com.leontsai.timerulerview
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.leo.JsonString
 import com.leontsai.timerulerlib.TimeRulerView
 import com.leontsai.timerulerlib.bean.TimeInfo
 import com.leontsai.timerulerlib.utils.StringUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -26,6 +26,14 @@ class MainActivity : AppCompatActivity() {
         rulerView.onSelectTimeListener = object : TimeRulerView.OnSelectTimeListener {
             override fun onSelectTime(time: Long) {
                 rulerView_tv.text = sdf.format(time)
+            }
+
+            override fun onClickYesterDay() {
+                Toast.makeText(this@MainActivity,"点击昨天",Toast.LENGTH_LONG).show()
+            }
+
+            override fun onClickToDay() {
+                Toast.makeText(this@MainActivity,"点击明天",Toast.LENGTH_LONG).show()
             }
         }
 
@@ -89,4 +97,21 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+//    override fun setRequestedOrientation(requestedOrientation: Int) {
+//        super.setRequestedOrientation(requestedOrientation)
+//    }
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        val orientation: Int = newConfig.orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Log.i("onConfigurationChanged", "-------------横屏-------------")
+        } else {
+            Log.i("onConfigurationChanged", "-------------竖屏-------------")
+        }
+        Log.i(
+            "onConfigurationChanged",
+            "onConfigurationChanged: $orientation"
+        )
+    }
 }

@@ -13,7 +13,13 @@ internal class OnTouchListener(val listener: OnActionListener) : GestureDetector
     override fun onDown(e: MotionEvent?): Boolean {
         Log.i("cyl", "onDown")
         filterFirstMove = true
+//        listener.onDown(e)
         return super.onDown(e)
+    }
+
+    override fun onSingleTapUp(e: MotionEvent?): Boolean {
+        listener.onSingleTapUp(e)
+        return super.onSingleTapUp(e)
     }
 
     override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {

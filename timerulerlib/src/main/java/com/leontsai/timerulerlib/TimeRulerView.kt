@@ -435,6 +435,24 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
                 canvas.drawText("$i:00", moveX, baseLineY, mTextPaint)
             }
         }
+
+
+        if (i==0){
+            val time = scaleList[0].time
+            var left=StringUtils.countingString((time-(measuredWidth / 2/2* mMillisecondPerPixel)).toString())
+            val distance = Math.abs((left.toLong() - mCalendar.timeInMillis) / mMillisecondPerPixel)
+            val leftX =
+                if (left.toLong() < mCalendar.timeInMillis) measuredWidth / 2 - distance else measuredWidth / 2 + distance
+            canvas.drawText("昨天", leftX, baseLineY, mTextPaint)
+        }else if (i==scaleList.size-1){
+            val time = scaleList[scaleList.size-1].time
+            var right=StringUtils.countingString((time+(measuredWidth / 2+measuredWidth /2/2* mMillisecondPerPixel)).toString())
+            val distance = Math.abs((right.toLong() - mCalendar.timeInMillis) / mMillisecondPerPixel)
+            val rightX =
+                if (right.toLong() < mCalendar.timeInMillis) measuredWidth / 2 - distance else measuredWidth / 2 + distance
+            canvas.drawText("明天", rightX, baseLineY, mTextPaint)
+        }
+
     }
 
     override fun onMove(distanceX: Float) {
@@ -468,9 +486,39 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
         invalidate()
     }
 
+
+    override fun onSingleTapUp(e: MotionEvent?) {
+
+       var halfW= measuredWidth / 2
+        val yesterTime = scaleList[0].time
+        val yesterDistance = Math.abs((yesterTime - mCalendar.timeInMillis) / mMillisecondPerPixel)
+        var yesterW=halfW-yesterDistance
+        val toTime = scaleList[scaleList.size-1].time
+        val toDistance = Math.abs((toTime - mCalendar.timeInMillis) / mMillisecondPerPixel)
+        var toW=halfW+toDistance
+
+       var yH= bottom-top
+        when(e?.action){
+            MotionEvent.ACTION_UP ->{
+                Log.i("cyl", "onDown X:${e?.x}  yesterW:${yesterW} toW:${toW} Y:${e?.y}  yH:${yH}  ")
+                if (e?.x>0&&e?.x<yesterW&&e?.y>0&&e?.y<yH ){
+                    Log.i("cyl", "昨天 ${e?.x} ${e?.y} ${yesterW} ${yH}")
+                    onSelectTimeListener?.onClickYesterDay()
+                }else if (e?.x>toW&&e?.x<measuredWidth&&e?.y>0&&e?.y<yH ){
+                    Log.i("cyl", "明天 ${e?.x} ${e?.y} ${toW} ${yH} ")
+                    onSelectTimeListener?.onClickToDay()
+                }
+            }
+        }
+
+    }
+
+
     var onSelectTimeListener: OnSelectTimeListener? = null
 
     interface OnSelectTimeListener {
         fun onSelectTime(time: Long)
+        fun onClickYesterDay()
+        fun onClickToDay()
     }
 }
