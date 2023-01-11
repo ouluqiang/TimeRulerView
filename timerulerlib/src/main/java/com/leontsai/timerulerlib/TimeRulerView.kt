@@ -163,13 +163,13 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
     /**
      * 需要播放的时间段列表
      */
-    var timeInfos = arrayListOf<TimeInfo>()
+    var timeInfos = mutableListOf<TimeInfo>()
         set(value) {
             field = value
             invalidate()
         }
 
-    private var scaleList = arrayListOf<ScaleInfo>()
+    private var scaleList = mutableListOf<ScaleInfo>()
 
     /**
      * 回放时间段最小时间点

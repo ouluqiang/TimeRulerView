@@ -46,14 +46,14 @@ class MainActivity : AppCompatActivity() {
 //        calendar.set(year,month,day,12,0,0)
 
 
-       var map= JsonString.getJson(this)
-        val timeInfos = arrayListOf<TimeInfo>()
-        for (i in 0 until map!!.size){
-            var start= map[i]?.get(0)
-            var end= map[i]?.get(map[i]!!.size-1)
-            val timeInfo = TimeInfo(StringUtils.stringCalendar(start), StringUtils.stringCalendar(end))
-            timeInfos.add(timeInfo)
-        }
+//       var map= JsonString.getJson(this)
+//        val timeInfos = arrayListOf<TimeInfo>()
+//        for (i in 0 until map!!.size){
+//            var start= map[i]?.get(0)
+//            var end= map[i]?.get(map[i]!!.size-1)
+//            val timeInfo = TimeInfo(StringUtils.stringCalendar(start), StringUtils.stringCalendar(end))
+//            timeInfos.add(timeInfo)
+//        }
 
 //        val start0 = Calendar.getInstance()
 //        start0.set(year, month, day, 9, 30, 0)
@@ -87,13 +87,13 @@ class MainActivity : AppCompatActivity() {
 //        timeInfos.add(timeInfo2)
 //        timeInfos.add(timeInfo3)
 
-        for (i in 0 until timeInfos!!.size){
-            Log.d("times","${StringUtils.calendarString(timeInfos[i].startTime)}   ${StringUtils.calendarString(timeInfos[i].endTime)}")
-        }
-
-        rulerView.timeInMillis = timeInfos[0].startTime.timeInMillis
+//        for (i in 0 until timeInfos!!.size){
+//            Log.d("times","${StringUtils.calendarString(timeInfos[i].startTime)}   ${StringUtils.calendarString(timeInfos[i].endTime)}")
+//        }
+        var list= JsonString.getJson(this)
+        rulerView.timeInMillis = list[0].startTime.timeInMillis
         rulerView_tv.text = sdf.format(rulerView.timeInMillis)
-        rulerView.timeInfos = timeInfos
+        rulerView.timeInfos = list
 
     }
 
