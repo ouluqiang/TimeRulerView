@@ -248,7 +248,7 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
                 )
         mScaleLineStrokeWidth = typedArray.getDimension(
             R.styleable.TimeRulerView_scaleLineStrokeWidth,
-            ConvertUtils.dp2px(2f).toFloat()
+            ConvertUtils.dp2px(1f).toFloat()
         )
         mMiddleLineStrokeWidth = typedArray.getDimension(
             R.styleable.TimeRulerView_middleLineStrokeWidth,
@@ -288,7 +288,7 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
 
         mTextPaint.isAntiAlias = true
         mTextPaint.color = mTextColor
-        mTextPaint.style = Paint.Style.STROKE
+        mTextPaint.style = Paint.Style.FILL
         mTextPaint.textAlign = Paint.Align.CENTER
         mTextPaint.textSize = mTextFontSize
     }
@@ -336,7 +336,7 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
     private fun drawMiddleLine(canvas: Canvas) {
         canvas.drawLine(
             measuredWidth / 2f,
-            0f,
+            mTextFontSize+ ConvertUtils.dp2px(4f),
             measuredWidth / 2f,
             measuredHeight.toFloat(),
             mMiddleLinePaint
@@ -353,14 +353,27 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
             if (distance < measuredWidth / 2) {
                 val XFromMiddlePoint =
                     if (time < mCalendar.timeInMillis) measuredWidth / 2 - distance else measuredWidth / 2 + distance
-                canvas.drawLine(
-                    XFromMiddlePoint.toFloat()
-                    , (measuredHeight - ConvertUtils.dp2px(5f)).toFloat()
-                    , XFromMiddlePoint.toFloat()
-                    , measuredHeight.toFloat()
-                    , mScaleLinePaint
-                )
-
+                if (i % lattice == 0) {
+                    canvas.drawLine(
+                        XFromMiddlePoint.toFloat()
+//                    , (measuredHeight - ConvertUtils.dp2px(5f)).toFloat()
+                        ,
+                        mTextFontSize + ConvertUtils.dp2px(8f),
+                        XFromMiddlePoint.toFloat(),
+                        (measuredHeight.toFloat() - ConvertUtils.dp2px(8f)).toFloat(),
+                        mScaleLinePaint
+                    )
+                }else {
+                    canvas.drawLine(
+                        XFromMiddlePoint.toFloat()
+//                    , (measuredHeight - ConvertUtils.dp2px(5f)).toFloat()
+                        ,
+                        mTextFontSize + ConvertUtils.dp2px(15f),
+                        XFromMiddlePoint.toFloat(),
+                        (measuredHeight.toFloat() - ConvertUtils.dp2px(15f)).toFloat(),
+                        mScaleLinePaint
+                    )
+                }
                 drawText(i, XFromMiddlePoint.toFloat(), canvas)
             }
         }
@@ -420,19 +433,20 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
         val bottom = fontMetrics.bottom//为基线到字体下边框的距离,即上图中的bottom
         val baseLineY = measuredHeight / 2 - top / 2 - bottom / 2//基线中间点的y轴计算公式
 
-        if (mTotalCellNum == num) {
+        val timeLineY =mTextFontSize+ConvertUtils.dp2px(2f)
+            if (mTotalCellNum == num) {
             if (i % lattice == 0) {
                 if (i < lattice*10) {
-                    canvas.drawText("0" + (i / lattice).toString() + ":00", moveX, baseLineY, mTextPaint)
+                    canvas.drawText("0" + (i / lattice).toString() + ":00", moveX, timeLineY, mTextPaint)
                 } else {
-                    canvas.drawText((i / lattice).toString() + ":00", moveX, baseLineY, mTextPaint)
+                    canvas.drawText((i / lattice).toString() + ":00", moveX, timeLineY, mTextPaint)
                 }
             }
         } else if (mTotalCellNum == 24) {
             if (i < 10) {
-                canvas.drawText("0$i:00", moveX, baseLineY, mTextPaint)
+                canvas.drawText("0$i:00", moveX, timeLineY, mTextPaint)
             } else {
-                canvas.drawText("$i:00", moveX, baseLineY, mTextPaint)
+                canvas.drawText("$i:00", moveX, timeLineY, mTextPaint)
             }
         }
 
