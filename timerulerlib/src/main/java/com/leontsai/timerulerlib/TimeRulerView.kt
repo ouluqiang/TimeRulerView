@@ -252,7 +252,7 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
         )
         mMiddleLineStrokeWidth = typedArray.getDimension(
             R.styleable.TimeRulerView_middleLineStrokeWidth,
-            ConvertUtils.dp2px(3f).toFloat()
+            ConvertUtils.dp2px(2f).toFloat()
         )
         mWidthPerCell =
                 typedArray.getDimension(R.styleable.TimeRulerView_widthPerCell, ConvertUtils.dp2px(20f).toFloat())
@@ -304,8 +304,8 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
         drawTimeInfos(canvas!!)
         drawTopLine(canvas)
         drawBottomLine(canvas)
-        drawMiddleLine(canvas)
         drawScaleLine(canvas)
+        drawMiddleLine(canvas)
     }
 
     /**
