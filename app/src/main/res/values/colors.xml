@@ -4,6 +4,6 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="corner">#2196F3</color>
-    <color name="box_line">#502196F3</color>
+    <color name="box_line">#852196F3</color>
     <color name="middle_line_color">#F44336</color>
 </resources>

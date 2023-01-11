@@ -51,8 +51,8 @@ class MainActivity : AppCompatActivity() {
         for (i in 0 until map!!.size){
             var start= map[i]?.get(0)
             var end= map[i]?.get(map[i]!!.size-1)
-            val timeInfo0 = TimeInfo(StringUtils.stringCalendar(start), StringUtils.stringCalendar(end))
-            timeInfos.add(timeInfo0)
+            val timeInfo = TimeInfo(StringUtils.stringCalendar(start), StringUtils.stringCalendar(end))
+            timeInfos.add(timeInfo)
         }
 
 //        val start0 = Calendar.getInstance()

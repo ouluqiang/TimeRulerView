@@ -25,54 +25,42 @@ object JsonString {
             if (s.contains(discontinuity)){
                 var extinfs= s.split(discontinuity)
                 for (i in extinfs.indices){
-                    var times=extinfs[i].split(extinf)
-                    var list= mutableListOf<String>()
-                    for (j in times.indices) {
-//                        Log.d("ss", "$i    ${times[j]}")
-                        if (!times[j].isNullOrEmpty()){
-                            list.add(times[j])
-                        }
-                    }
+                    var times=extinfs[i].split(extinf).filter { !it.isNullOrEmpty() }
+                    var list = getTimeList(times)
                     map.put(i,list)
                 }
             }else{
-                var times=s.split(extinf)
-                for (j in times.indices) {
-//                    Log.d("ss", "${times[j]}")
-                    var list= arrayListOf<String>()
-                    if (!times[j].isNullOrEmpty()){
-                        list.add(times[j])
-                    }
-                    map.put(0,list)
-                }
+                var times=s.split(extinf).filter { !it.isNullOrEmpty() }
+                var list = getTimeList(times)
+                map.put(0,list)
             }
-            var mapTime= mutableMapOf<Int,MutableList<String>>()
-            for (i in 0 until map.size) {
-//                Log.d("ss", "${map[i]}")
-                var list= arrayListOf<String>()
-                var times=map[i]
-                for (j in 0 until times!!.size) {
-//                        var other=".ts"
-                    if (times!!.size>1){
-                        var dates=times[j].split(",")
-                        var date=dates[1].substring(dates[1].lastIndexOf("/")+1,dates[1].lastIndexOf(".ts"))
-                        list.add(date)
-                    }else{
-                        var dates=times[j].split(",")
-                        var date=dates[1].substring(dates[1].lastIndexOf("/")+1,dates[1].lastIndexOf(".ts"))
-                        var endDate=StringUtils.countingString((date.toLong()+dates[0].toDouble()).toString())
-                        list.add(date)
-                        list.add(endDate)
-                    }
-                }
-                mapTime.put(i,list)
-            }
-            return mapTime
+            return map
         }
         return null
     }
 
+    private fun getTimeList(times: List<String>): MutableList<String> {
+        var list = mutableListOf<String>()
+        if (times.size > 1) {
+            list.add(getTime(times[0]))
+            list.add(getTime(times[times.size - 1], true))
+        } else {
+            list.add(getTime(times[0]))
+            list.add(getTime(times[0], true))
+        }
+        return list
+    }
 
+    private fun getTime(time:String,isEnd:Boolean=false):String{
+        var dates=time.split(",")
+        var date=dates[1].substring(dates[1].lastIndexOf("/")+1,dates[1].lastIndexOf(".ts"))
+        var endDate=StringUtils.countingString((date.toLong()+dates[0].toDouble()).toString())
+        if (isEnd){
+            return endDate
+        }else{
+            return date
+        }
+    }
 
 }
 
