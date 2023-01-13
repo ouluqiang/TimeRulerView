@@ -138,6 +138,7 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
      * 中间条绑定的日历对象
      */
     private var mCalendar = Calendar.getInstance()
+    private var mInitCalendar = Calendar.getInstance()
     /**
      * 中间条绑定的日历对象对应的毫秒数
      */
@@ -147,6 +148,7 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
         }
         set(value) {
             field = value
+//            mInitCalendar=mCalendar
             mCalendar.timeInMillis = field
             initMillisecond = mCalendar.timeInMillis
             initData()
@@ -202,8 +204,9 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
         val year = mCalendar.get(Calendar.YEAR)
         val month = mCalendar.get(Calendar.MONTH)
         val day = mCalendar.get(Calendar.DAY_OF_MONTH)
-        mCalendar.set(year, month, day, 12, 0, 0)
-        initMillisecond = mCalendar.timeInMillis
+        mInitCalendar.set(year, month, day, 12, 0, 0)
+        initMillisecond = mInitCalendar.timeInMillis
+        mMoveDistance = (initMillisecond -mCalendar.timeInMillis) /mMillisecondPerPixel
         scaleList.clear()
         val setTime = Calendar.getInstance()
         for (i in 0..mTotalCellNum) {
