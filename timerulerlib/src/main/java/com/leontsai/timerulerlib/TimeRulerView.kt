@@ -471,6 +471,28 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
         }
 
     }
+    var isScroll=false
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        when(event?.action){
+//            MotionEvent.ACTION_DOWN->{
+//                Log.i("down","down")
+//            }
+//            MotionEvent.ACTION_MOVE->{
+//                Log.i("MOVE","MOVE")
+//            }
+//            MotionEvent.ACTION_CANCEL->{
+//            }
+            MotionEvent.ACTION_UP->{
+                Log.i("UP","UP")
+                if (isScroll){
+                    onSelectTimeListener!!.onUpTime(mCalendar.timeInMillis)
+                    isScroll=false
+                }
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
 
     override fun onMove(distanceX: Float) {
         mMoveDistance += distanceX
@@ -498,7 +520,7 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
                 onSelectTimeListener!!.onSelectTime(time)
             }
         }
-
+        isScroll=true
 
         invalidate()
     }
@@ -535,6 +557,7 @@ class TimeRulerView(private val mContext: Context, attrs: AttributeSet?) : View(
 
     interface OnSelectTimeListener {
         fun onSelectTime(time: Long)
+        fun onUpTime(time: Long)
         fun onClickYesterDay()
         fun onClickToDay()
     }

@@ -17,13 +17,14 @@ internal class OnTouchListener(val listener: OnActionListener) : GestureDetector
         return super.onDown(e)
     }
 
+
     override fun onSingleTapUp(e: MotionEvent?): Boolean {
         listener.onSingleTapUp(e)
         return super.onSingleTapUp(e)
     }
 
     override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
-        Log.i("cyl", "onScroll---->distanceX:$distanceX   distanceY: $distanceY")
+        Log.i("cyl", "onScroll---->distanceX:$distanceX   distanceY: $distanceY   e1:${e1?.action} ${MotionEvent.ACTION_UP}")
         if (Math.abs(distanceX) <= 0.2f) return false
 
         //第一个distanceX有bug,不能用，过滤掉

@@ -28,6 +28,10 @@ class MainActivity : AppCompatActivity() {
                 rulerView_tv.text = sdf.format(time)
             }
 
+            override fun onUpTime(time: Long) {
+                Log.i("UP","UP"+sdf.format(time))
+            }
+
             override fun onClickYesterDay() {
                 Toast.makeText(this@MainActivity,"点击昨天",Toast.LENGTH_LONG).show()
             }
